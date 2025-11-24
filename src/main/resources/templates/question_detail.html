@@ -1,0 +1,29 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="max-w-3xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center" th:text="${question.subject}"></h1>
+
+    <div class="mb-6 whitespace-pre-line" th:text="${question.content}"></div>
+
+    <h5 class="mb-4 font-semibold"
+        th:text="|${#lists.size(question.answers)} 개의 답변이 있습니다.|"></h5>
+
+    <div class="mb-8">
+        <ul class="space-y-4">
+            <li th:each="answer : ${question.answers}" class="border border-gray-300 rounded p-4 max-w-full">
+                <div class="mb-2" th:text="${answer.content}"></div>
+                <div class="text-sm text-gray-500"
+                     th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+            </li>
+        </ul>
+    </div>
+
+    <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="space-y-4">
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <textarea class="border border-gray-300 rounded p-2 w-full resize-y max-w-full" th:field="*{content}"
+                  id="content"
+                  rows="6"></textarea>
+        <input class="border border-gray-300 rounded px-4 py-2 cursor-pointer hover:bg-gray-100 transition"
+               type="submit" value="답변 등록">
+    </form>
+</div>
+</html>
